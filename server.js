@@ -1,21 +1,25 @@
-import fastify from 'fastify';
+/* // CommonJs
+const fastify = require('fastify')({
+    logger: true
+}) */
 
-const PORT = 5005;
+// ESM
+import Fastify from 'fastify'
 
-const startServer = async () => {
-  const server = fastify({ logger: false });
+const fastify = Fastify({
+    logger: true
+  })
 
-  server.get('/', async (request, reply) => {
-    return 'Servidor rodando muito bem';
-  });
+const PORT = 5005
 
-  try {
-    const address = await server.listen(PORT);
-    console.log(`Servidor está rodando em: ${address}`);
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
-  }
-};
+fastify.get('/', (request, reply) => {
+    reply.send('Servidor Rodando - gui!')
+})
 
-startServer();
+fastify.listen({ port: PORT}, (err, address) => {
+    if(err) {
+        console.error('Erro ao subir o servdor', err)
+        return;
+    }
+    console.log(`Server is now listening on ${address}`);
+})
